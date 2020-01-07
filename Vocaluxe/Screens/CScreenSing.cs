@@ -253,7 +253,7 @@ namespace Vocaluxe.Screens
                         {
                             if (_Pause)
                             {
-                                _TogglePause();
+                                _SetPause(false);
                                 _RestartRound();
                             }
                         }
@@ -262,7 +262,7 @@ namespace Vocaluxe.Screens
                     case Keys.F5:
                         if (_Pause)
                         {
-                            _TogglePause();
+                            _SetPause(false);
                             _RestartRound();
                         }
                         break;
