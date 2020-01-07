@@ -1,4 +1,4 @@
-﻿#region license
+#region license
 // This file is part of Vocaluxe.
 // 
 // Vocaluxe is free software: you can redistribute it and/or modify
@@ -285,6 +285,14 @@ namespace VocaluxeLib.Songs
         {
             var loader = new CSongLoader(this);
             return loader.ReadNotes();
+        }
+
+        public bool ReloadSong()
+        {
+            var loader = new CSongLoader(this);
+            bool retValue = loader.ReadHeader();
+            retValue = loader.ReadNotes(true);
+            return retValue;
         }
 
         public bool Save()
