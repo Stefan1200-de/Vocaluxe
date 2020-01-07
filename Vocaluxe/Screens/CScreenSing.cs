@@ -1,4 +1,4 @@
-﻿#region license
+#region license
 // This file is part of Vocaluxe.
 // 
 // Vocaluxe is free software: you can redistribute it and/or modify
@@ -247,6 +247,25 @@ namespace Vocaluxe.Screens
                         if (CConfig.Config.Debug.SaveModifiedSongs == EOffOn.TR_CONFIG_ON)
                             song.Save();
                         break;
+
+                    case Keys.R:
+                        if (keyEvent.Mod == EModifier.Ctrl)
+                        {
+                            if (_Pause)
+                            {
+                                _TogglePause();
+                                _RestartRound();
+                            }
+                        }
+                        break;
+
+                    case Keys.F5:
+                        if (_Pause)
+                        {
+                            _TogglePause();
+                            _RestartRound();
+                        }
+                        break;
                 }
             }
 
@@ -470,6 +489,108 @@ namespace Vocaluxe.Screens
             CBackgroundMusic.Disabled = false;
         }
 
+        /// <summary>
+        /// Prepare streams and screen for current song.
+        /// </summary>
+        private void _LoadCurrentSong()
+        {
+            if (CGame.IsFinished())
+            {
+                _FinishedSinging();
+                return;
+            }
+
+            CSong song = CGame.GetSong();
+            song.ReloadSong();
+
+            if (song == null)
+            {
+                CLog.LogError("Critical Error! ScreenSing.LoadNextSong() song is null!");
+                return;
+            }
+
+            string songname = song.Artist + " - " + song.Title;
+            int rounds = CGame.GetNumSongs();
+            if (rounds > 1)
+                songname += " (" + CGame.RoundNr + "/" + rounds + ")";
+            _Texts[_TextSongName].Text = songname;
+
+            _CurrentStream = CSound.Load(song.GetMP3(), false, true, CConfig.Config.Sound.KaraokeEffect == EOffOn.TR_CONFIG_ON ? EAudioEffect.Karaoke : EAudioEffect.None);
+            CSound.SetStreamVolume(_CurrentStream, 100);
+            CSound.SetPosition(_CurrentStream, song.Start);
+            _CurrentTime = song.Start;
+            _FinishTime = song.Finish;
+            _TimeToFirstNote = 0f;
+            _TimeToFirstNoteDuet = 0f;
+            _Length = -1f;
+            var voiceAssignments = new int[CGame.NumPlayers];
+            if (song.IsDuet)
+            {
+                //Save duet-assignment before resetting
+                for (int i = 0; i < voiceAssignments.Length; i++)
+                    voiceAssignments[i] = CGame.Players[i].VoiceNr;
+            }
+
+            if (!String.IsNullOrEmpty(song.VideoFileName))
+            {
+                _CurrentVideo = CVideo.Load(Path.Combine(song.Folder, song.VideoFileName));
+                CVideo.Skip(_CurrentVideo, song.Start, song.VideoGap);
+                _VideoAspect = song.VideoAspect;
+            }
+
+            CDraw.RemoveTexture(ref _Background);
+            if (song.BackgroundFileNames.Count > 1)
+            {
+                _SlideShow = GetNewBackground();
+                foreach (string bgFile in song.BackgroundFileNames)
+                    _SlideShow.AddSlideShowTexture(Path.Combine(song.Folder, bgFile));
+            }
+            else if (song.BackgroundFileNames.Count == 1)
+            {
+                if (!String.IsNullOrEmpty(song.BackgroundFileNames[0]))
+                    _Background = CDraw.AddTexture(Path.Combine(song.Folder, song.BackgroundFileNames[0]));
+            }
+
+            if (song.IsDuet)
+            {
+                //TODO: Show more than 2 voicenames
+                _Texts[_TextDuetName1].Text = song.Notes.VoiceNames[0];
+                _Texts[_TextDuetName2].Text = song.Notes.VoiceNames[1];
+                //More than one song: Player is not assigned to line by user
+                //Otherwise, this is done by CScreenNames
+                if (CGame.GetNumSongs() > 1)
+                {
+                    for (int i = 0; i < CGame.NumPlayers; i++)
+                        CGame.Players[i].VoiceNr = (i + 1) % 2;
+                }
+                else
+                {
+                    for (int i = 0; i < CGame.NumPlayers; i++)
+                        CGame.Players[i].VoiceNr = voiceAssignments[i];
+                }
+            }
+
+            _DynamicLyricsTop = false;
+            _DynamicLyricsBottom = false;
+
+            foreach (CNoteBars notes in _SingNotes[_SingBars].PlayerNotes)
+            {
+                if (notes.Rect.Bottom >= CSettings.RenderH / 2)
+                    _DynamicLyricsBottom = true;
+                else
+                    _DynamicLyricsTop = true;
+            }
+
+            _SetNormalLyricsVisibility();
+
+            _TimerSongText.Reset();
+            _TimerDuetText1.Reset();
+            _TimerDuetText2.Reset();
+
+            if (!song.IsDuet)
+                _TimerSongText.Start();
+        }
+
         private void _CloseSong()
         {
             if (_CurrentStream > -1)
@@ -511,6 +632,7 @@ namespace Vocaluxe.Screens
             }
 
             CSong song = CGame.GetSong();
+            song.ReloadSong();
 
             if (song == null)
             {
@@ -666,6 +788,35 @@ namespace Vocaluxe.Screens
 
             if (_Webcam)
                 CWebcam.Stop();
+        }
+
+        /// <summary>
+        /// Restart current round: Only sing current song again.
+        /// </summary>
+        private void _RestartRound()
+        {
+            _CloseSong();
+
+            CGame.ResetPlayer();
+            _LoadCurrentSong();
+
+            _StartSong();
+        }
+
+        /// <summary>
+        /// Restart complete game: If there is more than one song, sing every song again.
+        /// </summary>
+        private void _RestartGame()
+        {
+            _CloseSong();
+
+            CGame.Reset();
+            CGame.ResetPlayer();
+            CGame.NextRound();
+
+            _LoadCurrentSong();
+
+            _StartSong();
         }
 
         private int _FindCurrentLine(CVoice voice, CSongLine[] lines, CSong song)

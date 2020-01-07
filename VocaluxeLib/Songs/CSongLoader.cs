@@ -1,4 +1,4 @@
-﻿#region license
+#region license
 // This file is part of Vocaluxe.
 // 
 // Vocaluxe is free software: you can redistribute it and/or modify
@@ -110,6 +110,9 @@ namespace VocaluxeLib.Songs
                 _Song._CalculateMedley = true;
                 _Song.Preview.Source = EDataSource.None;
                 _Song.ShortEnd.Source = EDataSource.None;
+                _Song.Start = 0;
+                _Song.VideoGap = 0;
+                _Song.Preview.StartTime = 0;
 
                 var headerFlags = new EHeaderFlags();
                 StreamReader sr = null;
