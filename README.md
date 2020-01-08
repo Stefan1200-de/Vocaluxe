@@ -24,6 +24,11 @@ Supported Operating Systems / Requirements:
 - 1 GHz CPU, 512 MB RAM, Graphics card with OpenGL 2.1 or DirectX 9.0 support
 - Visual C++ Redistributable Package 2010
 
+## 1.1. Fork by Stefan1200
+This is a fork from the official release-0.4.1 branch, because since 18 months nothing was changed here and none of the main Vocaluxe developer seems to be active currently. My own binary releases require Windows 10 x64, because I use the default Visual Studio 2019 compiling target.
+
+Please check out my own releases on this GitHub page: https://github.com/Stefan1200-de/Vocaluxe/releases
+All other parts of this readme file will be kept in the original state, as long as I have the hope that the original project will be maintained someday again.
 
 ## 2. Download                
 You can download precompiled Windows binaries at here:
