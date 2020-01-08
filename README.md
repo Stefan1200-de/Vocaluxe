@@ -34,6 +34,8 @@ All other parts of this readme file will be kept in the original state, as long 
 You can download precompiled Windows binaries at here:
 https://vocaluxe.org/#download
 
+Releases of this fork: https://github.com/Stefan1200-de/Vocaluxe/releases
+
 ## 3. Contributing
 You want to fix a bug or add a cool new feature to Vocaluxe? Awesome!
 
