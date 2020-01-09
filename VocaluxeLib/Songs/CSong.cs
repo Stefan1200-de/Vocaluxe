@@ -332,7 +332,7 @@ namespace VocaluxeLib.Songs
         {
             if (CoverFileName == "")
             {
-                List<string> files = CHelper.ListImageFiles(Folder);
+                IEnumerable<string> files = CHelper.ListImageFiles(Folder);
                 foreach (String file in files)
                 {
                     if (file.ContainsIgnoreCase("[CO]") &&
@@ -343,7 +343,7 @@ namespace VocaluxeLib.Songs
 
             if (BackgroundFileNames.Count == 0)
             {
-                List<string> files = CHelper.ListImageFiles(Folder);
+                IEnumerable<string> files = CHelper.ListImageFiles(Folder);
                 foreach (String file in files)
                 {
                     if (file.ContainsIgnoreCase("[BG]") &&

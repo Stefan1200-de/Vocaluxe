@@ -1,4 +1,4 @@
-﻿#region license
+#region license
 // This file is part of Vocaluxe.
 // 
 // Vocaluxe is free software: you can redistribute it and/or modify
@@ -134,7 +134,7 @@ namespace Vocaluxe.Base.ThemeSystem
 
         public static bool ReadThemesFromFolder(string path, int partyModeID)
         {
-            List<string> files = CHelper.ListFiles(path, "*.xml", false, true);
+            IEnumerable<string> files = CHelper.ListFiles(path, "*.xml", false, true);
 
             List<CTheme> newThemes = new List<CTheme>();
             foreach (string file in files)

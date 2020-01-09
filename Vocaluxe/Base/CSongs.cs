@@ -1,4 +1,4 @@
-﻿#region license
+#region license
 // This file is part of Vocaluxe.
 // 
 // Vocaluxe is free software: you can redistribute it and/or modify
@@ -338,14 +338,13 @@ namespace Vocaluxe.Base
             _Songs.Clear();
 
             CLog.StartBenchmark("List Songs");
-            var files = new List<string>();
-            foreach (string p in CConfig.SongFolders)
+            var files = Enumerable.Empty<string>();
+            foreach (string path in CConfig.SongFolders)
             {
-                if (Directory.Exists(p))
+                if (Directory.Exists(path))
                 {
-                    string path = p;
-                    files.AddRange(CHelper.ListFiles(path, "*.txt", true, true));
-                    files.AddRange(CHelper.ListFiles(path, "*.txd", true, true));
+                    files = files.Union(CHelper.ListFiles(path, "*.txt", true, true));
+                    files = files.Union(CHelper.ListFiles(path, "*.txd", true, true));
                 }
             }
             CLog.StopBenchmark("List Songs");

@@ -1,4 +1,4 @@
-﻿#region license
+#region license
 // This file is part of Vocaluxe.
 // 
 // Vocaluxe is free software: you can redistribute it and/or modify
@@ -85,7 +85,7 @@ namespace Vocaluxe.Base.ThemeSystem
             }
 
             string path = Path.Combine(_Folder, Name);
-            List<string> files = CHelper.ListFiles(path, "*.xml");
+            IEnumerable<string> files = CHelper.ListFiles(path, "*.xml");
 
             // Load skins, succeed if at least 1 skin was loaded
             bool ok = false;
