@@ -25,7 +25,7 @@ Supported Operating Systems / Requirements:
 - Visual C++ Redistributable Package 2010
 
 ## 1.1. Fork by Stefan1200
-This is a fork from the official release-0.4.1 branch, because 2019 nothing was changed at the official Vocaluxe project and none of the main Vocaluxe developer seems to be active. My own binary releases require Windows 10 x64, because I use the default Visual Studio 2019 compiling target.
+This is a fork from the official release-0.4.1 branch, because 2019 nothing was changed at the official Vocaluxe project and none of the main Vocaluxe developer seemed to be active. My own binary releases require Windows 10 x64, because I use the default Visual Studio 2019 compiling target.
 
 Since early January 2020 I'm now part of the official Vocaluxe project, so the official nightlies got new features and bugfixes. Check it out on the official Vocaluxe website or GitHub page.
 
