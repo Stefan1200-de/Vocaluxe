@@ -29,7 +29,8 @@ This is a fork from the official release-0.4.1 branch, because 2019 nothing was 
 
 Since early January 2020 I'm now part of the official Vocaluxe project, so the official nightlies got new features and bugfixes. Check it out on the official Vocaluxe website or GitHub page.
 
-Please check out my own releases on this GitHub page: https://github.com/Stefan1200-de/Vocaluxe/releases
+If you still want to use my 0.4.1 release, check out my releases on this GitHub page: https://github.com/Stefan1200-de/Vocaluxe/releases
+But I don't continue developing this fork, because I continue the work on the official release.
 All other parts of this readme file will be kept in the original state.
 
 ## 2. Download                
